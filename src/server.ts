@@ -1,7 +1,11 @@
-import express from 'express';
+import createApp from './app';
 
-const app = express();
+async function start() {
+    const app =  await createApp();
+    const port = process.env.PORT; 
+    app.listen(port, ()=>{
+        console.log(`Server running on port ${port}`);
+    })
+}
 
-app.listen(3000, ()=>{
-    console.log("Server running")
-})
+start();
