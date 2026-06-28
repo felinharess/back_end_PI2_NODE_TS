@@ -7,7 +7,8 @@ export async function createUser(req: Request, res: Response) {
     try {
         const { name, email, password } = req.body;
         const user = await User.create({ name, email, password });
-        return res.status(201).json(user);
+        const { password: _, ...userWithoutPassword } = user.get({ plain: true });
+        return res.status(201).json(userWithoutPassword);
     } catch (error: any) {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(409).json({ error: 'Email already exists' });
@@ -18,7 +19,7 @@ export async function createUser(req: Request, res: Response) {
 
 export async function getAllUsers(_req: Request, res: Response) {
     try {
-        const users = await User.findAll();
+        const users = await User.findAll({ attributes: { exclude: ['password'] } });
         return res.status(200).json(users);
     } catch {
         return res.status(500).json({ error: 'Internal server error' });
@@ -28,7 +29,7 @@ export async function getAllUsers(_req: Request, res: Response) {
 export async function getUserById(req: Request<Params>, res: Response) {
     try {
         const { id } = req.params;
-        const user = await User.findByPk(id);
+        const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
@@ -47,7 +48,8 @@ export async function updateUser(req: Request<Params>, res: Response) {
             return res.status(404).json({ error: 'User not found' });
         }
         await user.update({ name, email, password });
-        return res.status(200).json(user);
+        const { password: _, ...userWithoutPassword } = user.get({ plain: true });
+        return res.status(200).json(userWithoutPassword);
     } catch (error: any) {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(409).json({ error: 'Email already exists' });

@@ -29,5 +29,5 @@ export const Analysis = database.define('analyses', {
 }, {
     timestamps: true
 })
-Analysis.belongsTo(Content, { foreignKey: 'content_id' })
-Content.hasOne(Analysis, { foreignKey: 'content_id' })
+Analysis.belongsTo(Content, { foreignKey: 'content_id', as: 'Content' })
+Content.hasOne(Analysis, { foreignKey: 'content_id', as: 'Analysis' })
