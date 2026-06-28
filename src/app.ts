@@ -8,7 +8,10 @@ import analysisRoutes from './routes/analysisRoutes';
 export default async function createApp() {
     const app = express();
     app.use(json());
-    app.use(cors());
+    app.use(cors({
+        origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:5173'],
+        credentials: true
+    }));
 
     try{
         await database.authenticate();

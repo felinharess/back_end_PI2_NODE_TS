@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/server.js",
     "dist": "tsup src",
     "start:dev": "tsx src/server.ts",
     "start:watch": "tsx watch src/server.ts",
-    "start:dist": "npm run dist && node dist/src/index.js"
+    "start:dist": "npm run dist && node dist/server.js"
   },
   "keywords": [],
   "author": "",
